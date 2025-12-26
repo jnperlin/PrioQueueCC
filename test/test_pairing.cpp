@@ -129,4 +129,47 @@ TEST(Pairing3, IterDelete) {
     }
     ASSERT_EQ(cnt, v.size() / 2);
 }
+
+TEST(Pairing3, IterBack) {
+    PairingHeap<int> a;
+    std::vector<int> v{1, 3, 5, 2, 4, 6};
+
+    for (auto i : v)
+        a.push(i);
+
+    auto it{a.end()};
+    auto last{a.begin()};
+    unsigned cnt{0};
+    while (it != last) {
+        --it;
+        ++cnt;
+    }
+    ASSERT_EQ(v.size(), cnt);
+    ASSERT_THROW(--it, std::out_of_range);
+}
+
+TEST(Pairing3, IterBackAfterErase) {
+    PairingHeap<int> a;
+    for (int i = 0; i < 100; ++i)
+        a.push(i);
+
+    // erase during forward traversal
+    for (auto it = a.begin(); it != a.end(); ) {
+        if (*it & 1)
+            it = a.remove(it);
+        else
+            ++it;
+    }
+
+    // now reverse-iterate
+    auto it = a.end();
+    unsigned cnt = 0;
+    while (it != a.begin()) {
+        --it;
+        ASSERT_EQ(0, (*it & 1));
+        ++cnt;
+    }
+    ASSERT_EQ(50, cnt);
+}
+
 // --*-- that's all folks --*--

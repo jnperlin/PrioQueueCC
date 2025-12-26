@@ -293,7 +293,7 @@ PairingHeapT::_iter_succ(
     return const_cast<BaseNodeT*>(node);
 }
 
-/// @brief iterate backward -- next step for left-to-left pre-order iteration
+/// @brief iterate backward -- next step for left-to-right pre-order iteration
 /// @param node current position
 /// @return     next position
 /// @throws @c std::out_of_range if predecessor does not exits
@@ -302,7 +302,17 @@ PairingHeapT::_iter_pred(
     const BaseNodeT* node)
 {
     if (node) {
-        node = (node->_m_down ? node->_m_down : node->_m_next);
+        if (node->_m_down) {
+            node = node->_m_down;
+        } else if (node->_m_next) {
+            node = node->_m_next;
+        } else {
+            const BaseNodeT* prev{ node->_m_prev };
+            while (prev && (node == prev->_m_next || !prev->_m_next)) {
+                prev = (node = prev)->_m_prev;
+            }
+            node = prev ? prev->_m_next : prev;
+        }
     }
     if (!node) {
         throw std::out_of_range("--begin() decrement is undefined");
@@ -338,6 +348,6 @@ PairingHeapT::_iter_tail() const
 bool
 PairingHeapT::_iter_same(const BaseNodeT* p1, const BaseNodeT* p2)
 {
-    return (p1 == p2) || (!p1->_m_prev == !p2->_m_prev);
+    return (p1 == p2) || (!p1->_m_prev && !p2->_m_prev);
 }
 // --*-- that's all folks --*--

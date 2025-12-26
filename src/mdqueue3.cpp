@@ -366,7 +366,17 @@ MinDistHeapT::_iter_pred(
     const BaseNodeT* node)
 {
     if (node) {
-        node = (node->_m_lptr ? node->_m_lptr : node->_m_rptr);
+        if (node->_m_lptr) {
+            node = node->_m_lptr;
+        } else if (node->_m_rptr) {
+            node = node->_m_rptr;
+        } else {
+            const BaseNodeT *prev{node->_m_pptr};
+            while (prev && (node == prev->_m_rptr || !prev->_m_rptr)) {
+                prev = (node = prev)->_m_pptr;
+            }
+            node = prev ? prev->_m_rptr : prev;
+        }
     }
     if (!node) {
         throw std::out_of_range("--begin() decrement is undefined");
@@ -402,6 +412,6 @@ MinDistHeapT::_iter_tail() const
 bool
 MinDistHeapT::_iter_same(const BaseNodeT* p1, const BaseNodeT* p2)
 {
-    return (p1 == p2) || (!p1->_m_pptr == !p2->_m_pptr);
+    return (p1 == p2) || (!p1->_m_pptr && !p2->_m_pptr);
 }
 // --*-- that's all folks --*--
