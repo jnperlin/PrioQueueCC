@@ -132,20 +132,16 @@ TEST(MinDist3, IterDelete) {
         a.push(i);
     //a.push(v);
     for (auto it{a.begin()}; it != a.end(); /*NOP*/) {
-        std::cerr << "?? " << *it << ' ';
         if (*it & 1) {
             it = a.remove(it);
-            std::cerr << "remove\n";
         } else {
             ++it;
-            std::cerr << "keep\n";
         }
     }
 
     int cnt = 0;
     for (auto it{a.begin()}; it != a.end(); ++it) {
         ASSERT_LT(cnt, v.size());
-        std::cerr << " --> " << *it << '\n';
         ++cnt;
     }
     ASSERT_EQ(cnt, v.size() / 2);
@@ -153,7 +149,6 @@ TEST(MinDist3, IterDelete) {
     int old{0};
     cnt = 0;
     while (!a.empty()) {
-        std::cerr << " == " << a.front() << '\n';
         ASSERT_EQ(old + 2, a.front());
         old = a.front();
         a.pop();
@@ -196,7 +191,7 @@ TEST(MinDist3, IterBackAfterErase) {
     auto it{a.end()};
     auto last{a.begin()};
     unsigned cnt = 0;
-    while (it != a.begin()) {
+    while (it != last) {
         --it;
         ASSERT_EQ(0, (*it & 1));
         ++cnt;

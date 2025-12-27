@@ -100,28 +100,23 @@ TEST(Pairing3, IterDelete) {
     for (auto i : v)
         a.push(i);
     for (auto it{a.begin()}; it != a.end(); /*NOP*/) {
-        std::cerr << "?? " << *it << ' ';
         if (*it & 1) {
             it = a.remove(it);
-            std::cerr << "remove\n";
         } else {
             ++it;
-            std::cerr << "keep\n";
         }
     }
 
-    int cnt = 0;
+    int cnt{ 0 };
     for (auto it{a.begin()}; it != a.end(); ++it) {
         ASSERT_LT(cnt, v.size());
-        std::cerr << " --> " << *it << '\n';
         ++cnt;
     }
-    //ASSERT_EQ(cnt, v.size() / 2);
+    ASSERT_EQ(cnt, v.size() / 2);
 
-    int old{0};
+    int old{ 0 };
     cnt = 0;
     while (!a.empty()) {
-        std::cerr << " == " << a.front() << '\n';
         ASSERT_EQ(old + 2, a.front());
         old = a.front();
         a.pop();
@@ -132,13 +127,13 @@ TEST(Pairing3, IterDelete) {
 
 TEST(Pairing3, IterBack) {
     PairingHeap<int> a;
-    std::vector<int> v{1, 3, 5, 2, 4, 6};
+    std::vector<int> v{ 1, 3, 5, 2, 4, 6 };
 
     for (auto i : v)
         a.push(i);
 
-    auto it{a.end()};
-    auto last{a.begin()};
+    auto it{ a.end() };
+    auto last{ a.begin() };
     unsigned cnt{0};
     while (it != last) {
         --it;
@@ -162,9 +157,10 @@ TEST(Pairing3, IterBackAfterErase) {
     }
 
     // now reverse-iterate
-    auto it = a.end();
-    unsigned cnt = 0;
-    while (it != a.begin()) {
+    auto it{ a.end() };
+    auto last{ a.begin() };
+    unsigned cnt{ 0 };
+    while (it != last) {
         --it;
         ASSERT_EQ(0, (*it & 1));
         ++cnt;
