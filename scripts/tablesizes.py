@@ -1,7 +1,7 @@
 # -------------------------------------------------------------------------------------------
 # pointer map hastable size generator
 # -------------------------------------------------------------------------------------------
-# #is file is part of "PrioQueueCC" by J.Perlinger.
+# This file is part of "PrioQueueCC" by J.Perlinger.
 #
 # PrioQueueCC by J.Perlinger is marked CC0 1.0. To view a copy of this mark,
 #    visit https://creativecommons.org/publicdomain/zero/1.0/
